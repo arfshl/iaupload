@@ -1,0 +1,33 @@
+name: Upload
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+jobs:
+
+  upload:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v5
+    - name: upload
+    - shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+      run: |
+        curl -L -o Microsoft_Windows_95C_(4.03.1216)_(OSR2.5)_(1997-11-26)_[English].7z https://dl-alt1.winworldpc.com/Microsoft%20Windows%2095C%20(4.03.1216)%20(OSR2.5)%20(1997-11-26)%20[English].7z
+        curl -X PUT --upload-file Microsoft_Windows_95C_(4.03.1216)_(OSR2.5)_(1997-11-26)_[English].7z \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-title: Windows 95 OSR 2.5 (winworldpc.com reupload)" \
+               -H "x-archive-meta-description: "Windows 95 OSR 2.5 From WinWorld" \
+               "https://s3.us.archive.org/win95osr2.5/Microsoft_Windows_95C_(4.03.1216)_(OSR2.5)_(1997-11-26)_[English].7z" \
+               -u "$ACCESS:$SECRET"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
