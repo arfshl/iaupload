@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v5
     - name: upload
-    - shell: bash
+      shell: bash
       env:
         ACCESS: ${{ secrets.ACCESS }}
         SECRET: ${{ secrets.SECRET }}
