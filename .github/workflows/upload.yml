@@ -35,7 +35,7 @@ jobs:
                -H "x-archive-meta-title: Windows 95 OSR 2.5 (winworldpc.com reupload)" \
                -H "x-archive-meta-description: Windows 95 OSR 2.5 From WinWorld" \
                -H "User-Agent: curl" \
-               -H "authorization: LOW $ACCESS:$SECRET"
+               -H "authorization: LOW $ACCESS:$SECRET" \
                "https://s3.us.archive.org/win95osr2.5/Microsoft%20Windows%2095C%20%284.03.1216%29%20%28OSR2.5%29%20%281997-11-26%29%20%English.7z" \
                -u "$ACCESS:$SECRET"
 env:
