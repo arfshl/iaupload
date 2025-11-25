@@ -23,12 +23,12 @@ jobs:
         ACCESS: ${{ secrets.ACCESS }}
         SECRET: ${{ secrets.SECRET }}
       run: |
-        curl -L -o "Microsoft_Windows_95C_(4.03.1216)_(OSR2.5)_(1997-11-26)_[English].7z" "https://dl-alt1.winworldpc.com/Microsoft%20Windows%2095C%20(4.03.1216)%20(OSR2.5)%20(1997-11-26)%20[English].7z"
-        curl -X PUT --upload-file "Microsoft_Windows_95C_(4.03.1216)_(OSR2.5)_(1997-11-26)_[English].7z" \
+        curl -L -o "Microsoft Windows 95C (4.03.1216) (OSR2.5) (1997-11-26) [English].7z" "https://dl-alt1.winworldpc.com/Microsoft%20Windows%2095C%20%284.03.1216%29%20%28OSR2.5%29%20%281997-11-26%29%20%5BEnglish%5D.7z"
+        curl -X PUT --upload-file "Microsoft Windows 95C (4.03.1216) (OSR2.5) (1997-11-26) [English].7z" \
                -H "x-amz-auto-make-bucket:1" \
                -H "x-archive-meta-title: Windows 95 OSR 2.5 (winworldpc.com reupload)" \
                -H "x-archive-meta-description: "Windows 95 OSR 2.5 From WinWorld" \
-               "https://s3.us.archive.org/win95osr2.5/Microsoft_Windows_95C_(4.03.1216)_(OSR2.5)_(1997-11-26)_[English].7z" \
+               "https://s3.us.archive.org/win95osr2.5/Microsoft%20Windows%2095C%20%284.03.1216%29%20%28OSR2.5%29%20%281997-11-26%29%20%5BEnglish%5D.7z" \
                -u "$ACCESS:$SECRET"
 env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
