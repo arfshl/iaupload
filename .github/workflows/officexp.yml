@@ -28,7 +28,7 @@ jobs:
         ACCESS: ${{ secrets.ACCESS }}
         SECRET: ${{ secrets.SECRET }}
       run: |
-        wget -P "en_office_xp_pro.iso" "https://delivery.activated.win/dbmassgrave/en_office_xp_pro.iso?t=HmIx77sKkR2yz3wfzIP0PQkNsCRJP8NS&P1=1764157816&P2=601&P3=2&P4=yI6U6LH0HlCvtNmVrAhO3kv2A0WgwSzOKMkdtMzFKSo%3D"
+        wget -cO "en_office_xp_pro.iso" "https://delivery.activated.win/dbmassgrave/en_office_xp_pro.iso?t=HmIx77sKkR2yz3wfzIP0PQkNsCRJP8NS&P1=1764157816&P2=601&P3=2&P4=yI6U6LH0HlCvtNmVrAhO3kv2A0WgwSzOKMkdtMzFKSo%3D"
         sha512sum "en_office_xp_pro.iso"
         curl -X PUT \
                --upload-file "en_office_xp_pro.iso" \
