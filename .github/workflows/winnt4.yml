@@ -1,0 +1,44 @@
+name: Upload winnt4
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+      run: |
+        curl -C - -L -o "Microsoft Windows NT 4.0 Workstation (4.00.1381.1.sp1).7z" "https://winworldpc.com/download/4162c2ba-c3b7-18c3-9a11-c3a4e284a2ef/from/c3ae6ee2-8099-713d-3411-c3a6e280947e"
+        sha512sum "Microsoft Windows NT 4.0 Workstation (4.00.1381.1.sp1).7z"
+        curl -X PUT \
+               --upload-file "Microsoft Windows NT 4.0 Workstation (4.00.1381.1.sp1).7z" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Windows NT 4.0 Workstation (winworldpc.com reupload)" \
+               -H "x-archive-meta-description: Windows NT 4.0 Workstation From WinWorld" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/winnt4wks-winworldpc/Microsoft%20Windows%20NT%204.0%20Workstation%20%284.00.1381.1.sp1%29.7z"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
