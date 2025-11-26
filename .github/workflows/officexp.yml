@@ -38,7 +38,7 @@ jobs:
                -H "x-archive-meta-description: Microsoft Office XP Professional with Frontpage" \
                -H "User-Agent: curl" \
                -H "authorization: LOW $ACCESS:$SECRET" \
-               "https://s3.us.archive.org/officexpprowithfrontpage/en_office_xp_pro.iso"
+               "https://s3.us.archive.org/officexpprowfp/en_office_xp_pro.iso"
 env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
