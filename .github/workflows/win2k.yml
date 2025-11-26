@@ -1,0 +1,44 @@
+name: Upload win2k
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+      run: |
+        curl -C - -L -o "Microsoft Windows 2000 Professional (5.00.2195.6717.sp4).7z" "https://winworldpc.com/download/413ce280-9436-18c3-9a11-c3a4e284a2ef/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2"
+        sha512sum "Microsoft Windows 2000 Professional (5.00.2195.6717.sp4).7z"
+        curl -X PUT \
+               --upload-file "Microsoft Windows 2000 Professional (5.00.2195.6717.sp4).7z" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Microsoft Windows 2000 SP4 (winworldpc.com reupload)" \
+               -H "x-archive-meta-description: Microsoft Windows 2000 SP4 From WinWorld" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/win2ksp4-winworldpc/Microsoft%20Windows%202000%20Professional%20%285.00.2195.6717.sp4%29.7z"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
