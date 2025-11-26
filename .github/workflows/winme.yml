@@ -1,0 +1,45 @@
+name: Upload winme
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+        BUCKET: office97sr1-winworldpc
+      run: |
+        curl -C - -L -o "Microsoft Windows ME (4.90.3000) (OEM Full).7z" "https://winworldpc.com/download/e280941a-58c5-a0e2-809c-c38311c3a4ef/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2"
+        sha512sum "Microsoft Windows ME (4.90.3000) (OEM Full).7z"
+        curl -X PUT \
+               --upload-file "Microsoft Windows ME (4.90.3000) (OEM Full).7z" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Microsoft Windows ME (winworldpc.com reupload)" \
+               -H "x-archive-meta-description: Microsoft Windows ME From WinWorld" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/winme-winworldpc/Microsoft%20Windows%20ME%20%284.90.3000%29%20%28OEM%20Full%29.7z"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
