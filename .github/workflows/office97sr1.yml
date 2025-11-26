@@ -1,0 +1,50 @@
+name: Upload office97
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+        BUCKET: office97sr1-winworldpc
+      run: |
+        curl -C - -L -o "Microsoft Office 97 Professional SR-1 (3.5-DMF).7z" "https://winworldpc.com/download/c393c3a9-c5be-c3ad-c3b6-5f11c3a6c2bb/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2"
+        curl -C - -L -o "Microsoft Office 97 Professional SR-1 (ISO).7z" "https://winworldpc.com/download/c38ec3a2-7e53-c3a3-1211-c3a5c28f1352/from/c3ae6ee2-8099-713d-3411-c3a6e280947e"
+        sha512sum "Microsoft Office 97 Professional SR-1 (3.5-DMF).7z"
+        sha512sum "Microsoft Office 97 Professional SR-1 (ISO).7z"
+        for FILE in "Microsoft Office 97 Professional SR-1 (3.5-DMF).7z" "Microsoft Office 97 Professional SR-1 (ISO).7z"
+        do
+        curl -X PUT \
+               --upload-file "$FILE" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Microsoft Office 97 Professional SR-1 (winworldpc.com reupload)" \
+               -H "x-archive-meta-description: Microsoft Office 97 Professional SR-1 From WinWorld" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/$BUCKET/$(echo $FILE | sed 's/ /%20/g')"
+          done
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
