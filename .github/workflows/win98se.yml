@@ -1,0 +1,44 @@
+name: Upload win98se
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+      run: |
+        curl -C - -L -o "Microsoft Windows 98 Second Edition.7z" "https://winworldpc.com/download/417d71c2-ae18-c39a-11c3-a4e284a2c3a5/from/c3ae6ee2-8099-713d-3411-c3a6e280947e"
+        sha512sum "Microsoft Windows 98 Second Edition.7z"
+        curl -X PUT \
+               --upload-file "Microsoft Windows 98 Second Edition.7z" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Microsoft Windows 98 Second Edition (winworldpc.com reupload)" \
+               -H "x-archive-meta-description: Microsoft Windows 98 Second Edition From WinWorld" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/win98se-winworldpc/Microsoft%20Windows%2098%20Second%20Edition.7z"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
