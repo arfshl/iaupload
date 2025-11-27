@@ -1,0 +1,47 @@
+name: Upload win95rtm
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+      run: |
+        curl -C - -L -o "Microsoft Windows 95 (OEM) (RTM).7z" "https://winworldpc.com/download/07c3a63e-c2b4-6e04-11c3-a6e280947e52/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2"
+        curl -C - -L -o "Microsoft Windows 95 (4.00.950) [English] (3.5-1.44mb).7z" "https://winworldpc.com/download/44c592c3-81e2-8093-25c3-8911c3a6efbf/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2"
+        sha512sum "Microsoft Windows 95*"
+        for FILE in "Microsoft Windows 95 (OEM) (RTM).7z" "Microsoft Windows 95 (4.00.950) [English] (3.5-1.44mb).7z"
+        do
+        curl -X PUT \
+               --upload-file "$FILE" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Microsoft Windows 95 RTM (winworldpc.com) reupload" \
+               -H "x-archive-meta-description: Microsoft Windows 95 RTM (winworldpc.com) reupload" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/win95rtm-winworldpc/$(echo $FILE | sed 's/ /%20/g')"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
