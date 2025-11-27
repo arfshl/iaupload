@@ -38,7 +38,7 @@ jobs:
                -H "x-archive-meta-description: Microsoft Office 2003 Professional Enterprise" \
                -H "User-Agent: curl" \
                -H "authorization: LOW $ACCESS:$SECRET" \
-               "https://s3.us.archive.org/office2003proent/en_office_professional_enterprise_edition_2003_united_states_x86_cd_489281.iso"
+               "https://s3.us.archive.org/office2003pro/en_office_professional_enterprise_edition_2003_united_states_x86_cd_489281.iso"
 env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
