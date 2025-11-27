@@ -1,0 +1,47 @@
+name: Upload office43
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+      run: |
+        curl -C - -L -o "Microsoft Office 4.3 Professional (3.5 DMF).7z" "https://winworldpc.com/download/c3a2c2b7-3021-7dc2-ab11-c3a4c2ac5a54"
+        curl -C - -L -o "Microsoft Office 4.3a Professional (OEM) (ISO).7z" "https://winworldpc.com/download/bc0e09cc-66cd-11e8-a48f-fa163e9022f0/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2"
+        sha512sum "Microsoft Office*"
+        for FILE in ""Microsoft Office 4.3 Professional (3.5 DMF).7z" "Microsoft Office 4.3a Professional (OEM) (ISO).7z"
+        do
+        curl -X PUT \
+               --upload-file "$FILE" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Microsoft Office 4.3 Professional (winworldpc.com reupload)" \
+               -H "x-archive-meta-description: Microsoft Office 4.3 Professional (winworldpc.com reupload)" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/office43pro-winworldpc/$(echo $FILE | sed 's/ /%20/g')"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
