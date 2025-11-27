@@ -37,8 +37,8 @@ jobs:
                --upload-file "$FILE" \
                -H "x-amz-auto-make-bucket:1" \
                -H "x-archive-meta-mediatype:software" \
-               -H "x-archive-meta-title: Microsoft Windows 95 RTM (winworldpc.com) reupload" \
-               -H "x-archive-meta-description: Microsoft Windows 95 RTM (winworldpc.com) reupload" \
+               -H "x-archive-meta-title: Microsoft Windows 95 RTM (winworldpc.com reupload)" \
+               -H "x-archive-meta-description: Microsoft Windows 95 RTM (winworldpc.com reupload)" \
                -H "User-Agent: curl" \
                -H "authorization: LOW $ACCESS:$SECRET" \
                "https://s3.us.archive.org/win95rtm-winworldpc/$(echo $FILE | sed 's/ /%20/g')"
