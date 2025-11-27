@@ -1,0 +1,44 @@
+name: Upload office2003
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+      run: |
+        curl -C - -L -o "en_office_professional_enterprise_edition_2003_united_states_x86_cd_489281.iso" "https://delivery.massgrave.dev/dbmassgrave/en_office_professional_enterprise_edition_2003_united_states_x86_cd_489281.iso?t=0JQRppcuJ2bzE8JRYlpSaMAcBDvNjVz9&P1=1764239125&P2=601&P3=2&P4=WTyq32WbsDMFczVlHh%2F0vSOvMYINlEd3nWXemJkDJj8%3D"
+        sha512sum "en_office_professional_enterprise_edition_2003_united_states_x86_cd_489281.iso"
+        curl -X PUT \
+               --upload-file "en_office_professional_enterprise_edition_2003_united_states_x86_cd_489281.iso" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Microsoft Office 2003 Professional Enterprise" \
+               -H "x-archive-meta-description: Microsoft Office 2003 Professional Enterprise" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/office2003proent/en_office_professional_enterprise_edition_2003_united_states_x86_cd_489281.iso"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
