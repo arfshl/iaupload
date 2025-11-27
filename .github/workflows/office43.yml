@@ -43,6 +43,7 @@ jobs:
                -H "User-Agent: curl" \
                -H "authorization: LOW $ACCESS:$SECRET" \
                "https://s3.us.archive.org/office43pro-winworldpc/$(echo $FILE | sed 's/ /%20/g')"
+         done
 env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
