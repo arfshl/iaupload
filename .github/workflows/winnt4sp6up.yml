@@ -28,17 +28,22 @@ jobs:
         ACCESS: ${{ secrets.ACCESS }}
         SECRET: ${{ secrets.SECRET }}
       run: |
+        curl -C - -L -o "Windows NT 4.0 Service Pack 6a.7z" "https://winworldpc.com/download/41c39018-c2b1-18c3-9a11-c3a4e284a2ef/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2"
         curl -C - -L -o "Microsoft Windows NT 4.0 Service Pack 6a (OEM) (ISO).7z" "https://winworldpc.com/download/f0ce02e5-cca7-11e7-a73f-fa163e9022f0/from/c39ac2af-c381-c2bf-1b25-11c3a4e284a2"
         sha512sum "Microsoft Windows NT 4.0 Service Pack 6a (OEM) (ISO).7z"
+        sha512sum "Windows NT 4.0 Service Pack 6a.7z"
+        for FILE in "Microsoft Windows NT 4.0 Service Pack 6a (OEM) (ISO).7z" "Windows NT 4.0 Service Pack 6a.7z"
+        do
         curl -X PUT \
-               --upload-file "Microsoft Windows NT 4.0 Service Pack 6a (OEM) (ISO).7z" \
+               --upload-file "$FILE" \
                -H "x-amz-auto-make-bucket:1" \
                -H "x-archive-meta-mediatype:software" \
                -H "x-archive-meta-title: Windows NT 4.0 Service Pack 6a (Upgrade CD) (winworldpc.com reupload)" \
                -H "x-archive-meta-description: Windows NT 4.0 Workstation From WinWorld" \
                -H "User-Agent: curl" \
                -H "authorization: LOW $ACCESS:$SECRET" \
-               "https://s3.us.archive.org/winnt4wkssp6-winworldpc/Microsoft%20Windows%20NT%204.0%20Service%20Pack%206a%20(OEM)%20(ISO).7z"
+               "https://s3.us.archive.org/winnt4wkssp6-winworldpc/$(echo $FILE | sed 's/ /%20/g')"
+         done
 env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
