@@ -1,0 +1,64 @@
+name: Upload vmwaretools
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+        BUCKET: office97sr1-winworldpc
+      run: |
+        wget https://packages-prod.broadcom.com/tools/frozen/windows/winPre2k.iso
+        wget https://packages-prod.broadcom.com/tools/frozen/windows/winPre2k.iso.sha256
+        wget https://packages-prod.broadcom.com/tools/frozen/windows/winPreVista.iso.sha256
+        wget https://packages-prod.broadcom.com/tools/frozen/windows/winPreVista.iso
+        wget https://packages-prod.broadcom.com/tools/frozen/windows/WindowsToolsVista/SP1/windows.iso.sha256
+        wget -O windowsvistasp1.iso https://packages-prod.broadcom.com/tools/frozen/windows/WindowsToolsVista/SP1/windows.iso
+        wget -O windowsvistasp1.iso.sha256 https://packages-prod.broadcom.com/tools/frozen/windows/WindowsToolsVista/SP1/windows.iso.sha256
+        wget -O windowsvistasp2.iso https://packages-prod.broadcom.com/tools/frozen/windows/WindowsToolsVista/SP2/windows.iso
+        wget -O windowsvistasp2.iso.sha256 https://packages-prod.broadcom.com/tools/frozen/windows/WindowsToolsVista/SP2/windows.iso.sha256
+        sha256sum winPre2k.iso \
+           winPre2k.iso.sha256 \
+           winPreVista.iso \
+           winPreVista.iso.sha256 \
+           windows.iso.sha256 \
+           windowsvistasp1.iso \
+           windowsvistasp1.iso.sha256 \
+           windowsvistasp2.iso \
+           windowsvistasp2.iso.sha256
+        for FILE in "winPre2k.iso" "winPre2k.iso.sha256" "winPreVista.iso" "winPreVista.iso.sha256" "windows.iso.sha256" "windowsvistasp1.iso" "windowsvistasp1.iso.sha256" "windowsvistasp2.iso" "windowsvistasp2.iso.sha256"
+        do
+        curl -X PUT \
+               --upload-file "$FILE" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: VMWare Tools Legacy (for Windows 9x,NT,2000,XP,and Vista)" \
+               -H "x-archive-meta-description: VMWare Tools Legacy (for Windows 9x,NT,2000,XP,and Vista)"  \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/vmwaretoolslegacy/$FILE"
+          done
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
