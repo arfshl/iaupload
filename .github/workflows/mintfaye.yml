@@ -47,6 +47,7 @@ jobs:
                -H "User-Agent: curl" \
                -H "authorization: LOW $ACCESS:$SECRET" \
                "https://s3.us.archive.org/linuxmint-faye/$FILE"
+        done
 env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
