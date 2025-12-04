@@ -1,0 +1,52 @@
+name: Upload office2003
+
+
+on:
+  workflow_dispatch: 
+  
+  
+  
+permissions:
+  contents: write
+
+
+jobs:
+
+
+  upload:
+
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v5
+    
+    - name: upload
+      shell: bash
+      env:
+        ACCESS: ${{ secrets.ACCESS }}
+        SECRET: ${{ secrets.SECRET }}
+      run: |
+        curl -C - -L -o "lmde-6-cinnamon-32bit.iso" "https://pub.linuxmint.io/debian/lmde-6-cinnamon-32bit.iso"
+        curl -C - -L -o "lmde-6-cinnamon-64bit.iso" "https://pub.linuxmint.io/debian/lmde-6-cinnamon-64bit.iso"
+        curl -C - -L -o "sha256sum.txt" "https://mirrors.kernel.org/linuxmint/debian/sha256sum.txt"
+        curl -C - -L -o "sha256sum.txt.gpg" "https://mirrors.kernel.org/linuxmint/debian/sha256sum.txt.gpg"
+        sha256sum "lmde-6-cinnamon-32bit.iso"
+        sha256sum "lmde-6-cinnamon-64bit.iso"
+        sha256sum "sha256sum.txt"
+        sha256sum "sha256sum.txt.gpg"
+        for FILE in "lmde-6-cinnamon-32bit.iso" "lmde-6-cinnamon-64bit.iso" "sha256sum.txt" "sha256sum.txt.gpg"
+        do
+        curl -X PUT \
+               --upload-file "$FILE" \
+               -H "x-amz-auto-make-bucket:1" \
+               -H "x-archive-meta-mediatype:software" \
+               -H "x-archive-meta-title: Linux Mint Faye (64-bit and 32-bit)" \
+               -H "x-archive-meta-description: Linux Mint Faye (64-bit and 32-bit). Based on Debian Bookworm" \
+               -H "User-Agent: curl" \
+               -H "authorization: LOW $ACCESS:$SECRET" \
+               "https://s3.us.archive.org/linuxmint-faye/$FILE"
+env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
