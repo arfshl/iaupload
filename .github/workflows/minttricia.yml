@@ -28,25 +28,35 @@ jobs:
         ACCESS: ${{ secrets.ACCESS }}
         SECRET: ${{ secrets.SECRET }}
       run: |
-        curl -C - -L -o "lmde-6-cinnamon-32bit.iso" "https://pub.linuxmint.io/debian/lmde-6-cinnamon-32bit.iso"
-        curl -C - -L -o "lmde-6-cinnamon-64bit.iso" "https://pub.linuxmint.io/debian/lmde-6-cinnamon-64bit.iso"
-        curl -C - -L -o "sha256sum.txt" "https://mirrors.kernel.org/linuxmint/debian/sha256sum.txt"
-        curl -C - -L -o "sha256sum.txt.gpg" "https://mirrors.kernel.org/linuxmint/debian/sha256sum.txt.gpg"
-        sha256sum "lmde-6-cinnamon-32bit.iso"
-        sha256sum "lmde-6-cinnamon-64bit.iso"
-        sha256sum "sha256sum.txt"
-        sha256sum "sha256sum.txt.gpg"
-        for FILE in "lmde-6-cinnamon-32bit.iso" "lmde-6-cinnamon-64bit.iso" "sha256sum.txt" "sha256sum.txt.gpg"
+        curl -C - -L -o "linuxmint-19.3-cinnamon-32bit.iso" "http://repo.ugm.ac.id/iso/linuxmint/19.3/linuxmint-19.3-cinnamon-32bit.iso"
+        curl -C - -L -o "linuxmint-19.3-cinnamon-64bit.iso" "http://repo.ugm.ac.id/iso/linuxmint/19.3/linuxmint-19.3-cinnamon-64bit.iso"
+        curl -C - -L -o "linuxmint-19.3-mate-32bit.iso" "http://repo.ugm.ac.id/iso/linuxmint/19.3/linuxmint-19.3-mate-32bit.iso"
+        curl -C - -L -o "linuxmint-19.3-mate-64bit.iso" "http://repo.ugm.ac.id/iso/linuxmint/19.3/linuxmint-19.3-mate-64bit.iso"
+        curl -C - -L -o "linuxmint-19.3-xfce-32bit.iso" "http://repo.ugm.ac.id/iso/linuxmint/19.3/linuxmint-19.3-xfce-32bit.iso"
+        curl -C - -L -o "linuxmint-19.3-xfce-64bit.iso" "http://repo.ugm.ac.id/iso/linuxmint/19.3/linuxmint-19.3-xfce-64bit.iso"
+        curl -C - -L -o "sha256sum.txt" "http://repo.ugm.ac.id/iso/linuxmint/19.3/sha256sum.txt"
+        curl -C - -L -o "sha256sum.txt.gpg" "http://repo.ugm.ac.id/iso/linuxmint/19.3/sha256sum.txt.gpg"
+        for FILE in \
+        "linuxmint-19.3-cinnamon-32bit.iso" \
+        "linuxmint-19.3-cinnamon-64bit.iso" \
+        "linuxmint-19.3-mate-32bit.iso" \
+        "linuxmint-19.3-mate-64bit.iso" \
+        "linuxmint-19.3-xfce-32bit.iso" \
+        "linuxmint-19.3-xfce-64bit.iso"
+        do
+        sha256sum "$FILE"
+        done
+        for FILE in "linuxmint-19.3-cinnamon-32bit.iso" "linuxmint-19.3-cinnamon-64bit.iso" "linuxmint-19.3-mate-32bit.iso" "linuxmint-19.3-mate-64bit.iso" "linuxmint-19.3-xfce-32bit.iso" "linuxmint-19.3-xfce-64bit.iso" "sha256sum.txt" "sha256sum.txt.gpg"
         do
         curl -X PUT \
                --upload-file "$FILE" \
                -H "x-amz-auto-make-bucket:1" \
                -H "x-archive-meta-mediatype:software" \
-               -H "x-archive-meta-title: Linux Mint Faye (64-bit and 32-bit)" \
-               -H "x-archive-meta-description: Linux Mint Faye (64-bit and 32-bit). Based on Debian Bookworm" \
+               -H "x-archive-meta-title: Linux Mint 19.3 Tricia (64-bit and 32-bit)" \
+               -H "x-archive-meta-description: Linux Mint 19.3 Tricia (64-bit and 32-bit). Based on Ubuntu LTS 18.04 Bionic Beaver" \
                -H "User-Agent: curl" \
                -H "authorization: LOW $ACCESS:$SECRET" \
-               "https://s3.us.archive.org/linuxmint-faye/$FILE"
+               "https://s3.us.archive.org/linuxmint-tricia/$FILE"
         done
 env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
